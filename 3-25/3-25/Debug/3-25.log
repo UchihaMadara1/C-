@@ -1,0 +1,5 @@
+﻿  test.cpp
+d:\git上传目录\3-25\3-25\test.cpp(12): warning C4018: “<”: 有符号/无符号不匹配
+d:\git上传目录\3-25\3-25\test.cpp(14): warning C4018: “<”: 有符号/无符号不匹配
+d:\git上传目录\3-25\3-25\test.cpp(19): warning C4018: “<”: 有符号/无符号不匹配
+  3-25.vcxproj -> D:\git上传目录\3-25\Debug\3-25.exe
