@@ -2,9 +2,9 @@
 
 #include "Common.h"
 #include "SySutil.h"
-#include "./sqlite/sqlite3.h"
+
+#include "DataManager.h"
 //静态库
-#pragma comment(lib,"./sqlite/sqlite3.lib")
 
 
 int sqlite3_get_table(
@@ -50,9 +50,54 @@ void Test_Sqlite()
 	//关闭数据库
 	sqlite3_close(db);
 }
+void Test_SqliteManager()
+{
+	SqliteManager sm;
+	sm.Open("test.db");
+
+	/*string sql = "create table if not exists doc_db(id integer primary key autoincrement, name text, path text)";
+	sm.ExcuteSql(sql);
+	string sql1 = "insert into doc_db values(1,'bss.text','c:\\')";
+	string sql2 = "insert into doc_db values(NULL,'nxz.text','d:\\')";
+	sm.ExcuteSql(sql1);
+	sm.ExcuteSql(sql2);*/
+	string sql = "select * from doc_db";
+	int row = 0, col = 0;
+	char **ppRet = 0;
+	sm.GetResultTable(sql,row,col,ppRet);
+	for (int i = 0; i <= row; ++i)
+	{
+		for (int j = 0; j < col; ++j)
+		{
+			printf("%-10s",*(ppRet + (i * col) + j));
+		}
+		cout << endl;
+	}
+	sqlite3_free_table(ppRet);
+}
+void Test_Log()
+{
+	FILE *fp = fopen("Test.txt","w");
+	if (fp == NULL)
+	{
+		//__TraceDebug(const char* filename, int line, const char* function,
+		//const char* format, ...)
+		//__TraceDebug(__FILE__, __LINE__, __FUNCTION__, __VA_ARGS__);
+		TRACE_LOG("open test.txt failed...");
+		return;
+	}
+	else
+	{
+		//__ErrorDebug(__FILE__, __LINE__, __FUNCTION__, __VA_ARGS__);
+		TRACE_LOG("open test.txt successfully...");
+	}
+	fclose(fp);
+}
 int main(int argc, char *argv[])
 {
-	Test_Sqlite();
+	//Test_Log();
+	//Test_Sqlite();
+	Test_SqliteManager();
 	return 0;
 }
 //void Test_DirectionList()
@@ -107,7 +152,7 @@ int main(int argc, char *argv[])
 //		cout << "open database is successfally" << endl;
 //	}
 //	//操作数据库
-//	//string sql = "create table doc_db(id int primary key autoincrease,name varchar(20),path varchar(100))";
+//	//string sql = "create table doc_db(id integer primary key autoincrease,name varchar(20),path varchar(100))";
 //	//string sql = "insert into doc_db values(NULL,'xyz','d:\\')";
 //	string sql = "select * from doc_db";
 //	char *zErrmgz = 0;

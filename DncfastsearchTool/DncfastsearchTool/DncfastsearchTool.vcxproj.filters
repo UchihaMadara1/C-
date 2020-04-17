@@ -24,12 +24,18 @@
     <ClInclude Include="C:\文件搜索测试\DncfastsearchTool\DncfastsearchTool\sqlite3.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Susutil.cc">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DocfastSearchTool.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
