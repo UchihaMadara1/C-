@@ -68,11 +68,13 @@
     <ClInclude Include="C:\文件搜索测试\DncfastsearchTool\DncfastsearchTool\sqlite3.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DataManager.h" />
+    <ClInclude Include="ScanManager.h" />
     <ClInclude Include="SySutil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DocfastSearchTool.cc" />
+    <ClCompile Include="ScanManager.cpp" />
     <ClCompile Include="Susutil.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

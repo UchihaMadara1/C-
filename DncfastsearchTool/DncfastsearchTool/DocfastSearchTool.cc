@@ -4,6 +4,7 @@
 #include "SySutil.h"
 
 #include "DataManager.h"
+#include "ScanManager.h"
 //静态库
 
 
@@ -93,11 +94,91 @@ void Test_Log()
 	}
 	fclose(fp);
 }
+void Test_Set()
+{
+	vector<int> v = {2,3,5,1,9,7,4,10,6,8};
+	set<int> s;
+	s.insert(v.begin(),v.end());
+	for (auto &e : s)
+	{
+		cout << e <<" ";
+	}
+	cout << endl;
+
+	s.erase(5);
+
+	for (auto &e : s)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+void Test_Map()
+{
+	pair<int, string> p1 = { 1, "abc" };
+	pair<int, string> p2 = { 6, "dfg" };
+	pair<int, string> p3 = { 4, "rgb" };
+	pair<int, string> p4 = { 3,  "wdf"};
+	pair<int, string> p5 = { 2, "uhg" };
+	pair<int, string> p6 = { 5, "nht" };
+
+	map<int, string> mp;
+	mp.insert(p1);
+	mp.insert(p2);
+	mp.insert(p3);
+	mp.insert(p4);
+	mp.insert(p5);
+	mp.insert(p6);
+
+	for (auto &e : mp)
+	{
+		cout << e.first << " : " << e.second;
+		cout << endl;
+	}
+}
+void Test_Scan()
+{
+	//const string &path = "D:\\git上传目录\\DncfastsearchTool\\DncfastsearchTool";
+	const string &path = "C:\\Users\\Administrator\\Desktop\\Test";
+	
+	ScanManager sm;
+	
+	sm.ScanDirectory(path);
+}
+void Test_Search()
+{
+	const string &path = "C:\\Users\\Administrator\\Desktop\\Test";
+	//创建扫描实例
+	ScanManager sm;
+
+	sm.ScanDirectory(path);
+	//创建搜索实例
+	DataManager dm;
+
+	string key;
+	vector<pair<string, string>> doc_path;
+	while (true)
+	{
+		cout << "请输入要搜索的关键字：>";
+		cin >> key;
+		dm.Search(key,doc_path);
+
+		//显示结果
+		printf("%-15s%-50s\n","名称","路径");
+		for (auto &e : doc_path)
+			printf("%-15s%-50s\n", e.first.c_str(), e.second.c_str());
+	}
+}
 int main(int argc, char *argv[])
 {
 	//Test_Log();
 	//Test_Sqlite();
-	Test_SqliteManager();
+	//Test_SqliteManager();
+	//Test_Set;
+	//Test_Map();
+	//Test_Scan();
+	Test_Search();
+
 	return 0;
 }
 //void Test_DirectionList()

@@ -65,11 +65,81 @@ void SqliteManager::GetResultTable(const string &sql, int &row, int &col, char *
 	if (rc != SQLITE_OK)
 	{
 		//fprintf(stderr,"Get Result Tables failed %s\n",zErrMsg);
-		ERROR_LOG("Get Result Tables failed %s\n", zErrMsg);
+		ERROR_LOG("Get Result Tables failed %s\n", zErrMsg);       //BUG
 	}
 	else
 	{
 		//fprintf(stdout,"Get Result Tables successfully \n");
 		TRACE_LOG("Get Result Tables successfully \n");
 	}
+}
+///////////////////////////////////////////////////////
+DataManager::DataManager()
+{
+	m_dbmgr.Open(DOC_DB);
+	SqliteInit();
+}
+void DataManager::SqliteInit()
+{
+	char sql[SQL_BUFFER_SIZE] = {0};
+	sprintf(sql,"create table if not exists %s(id integer primary key autoincrement, name text, path text)",DOC_TABLE);
+	m_dbmgr.ExcuteSql(sql);
+}
+DataManager::~DataManager()
+{}
+void DataManager::InsertDoc(const string &path, const string &doc)
+{
+	char sql[SQL_BUFFER_SIZE] = {0};
+	sprintf(sql,"insert into %s values(null,'%s','%s')",DOC_TABLE,doc.c_str(),path.c_str());
+	//insert into doc_tb values(null,'1.txt','c:\');
+	m_dbmgr.ExcuteSql(sql);
+}
+void DataManager::GetDocs(const string &path, multiset<string> &docs)
+{
+	char sql[SQL_BUFFER_SIZE] = {0};
+	sprintf(sql,"select name from %s where path='%s'",DOC_TABLE,path.c_str());
+	int row = 0, col = 0;
+	char **ppRet = 0;
+	m_dbmgr.GetResultTable(sql,row,col,ppRet);
+	for (int i = 1; i <= row; ++i)     //无数据时的处理
+	{
+		docs.insert(ppRet[i]);
+	}
+	//释放结果表
+	sqlite3_free_table(ppRet);
+	
+}
+void DataManager::DeleteDoc(const string &path, const string &doc)
+{
+	char sql[SQL_BUFFER_SIZE] = {0};
+	sprintf(sql,"delete from %s where name='%s' and path='%s'",DOC_TABLE,doc.c_str(),path.c_str());
+	m_dbmgr.ExcuteSql(sql);
+
+	//级联删除目录下的文件
+
+	string doc_path = path;
+	doc_path += "\\";
+	doc_path += doc;
+
+	memset(sql,0,SQL_BUFFER_SIZE);
+	sprintf(sql,"delete from %s where path like '%s%%'",DOC_TABLE,doc_path.c_str());
+
+	m_dbmgr.ExcuteSql(sql);
+}
+////////////////////////////////////////////////////////////
+void DataManager::Search(const string &key,vector<pair<string,string>> &doc_path)
+{
+	char sql[SQL_BUFFER_SIZE] = {0};
+	sprintf(sql,"select name,path from %s where name like '%%%s%%'",DOC_TABLE,key.c_str());
+	int row = 0, col = 0;
+	char **ppRet = 0;
+	m_dbmgr.GetResultTable(sql,row,col,ppRet);
+
+	doc_path.clear();
+	for (int i = 1; i <= col; ++i)
+	{
+		doc_path.push_back(make_pair(ppRet[i*col],ppRet[i*col+1]));
+	}
+	//释放结果表
+	sqlite3_free_table(ppRet);
 }
