@@ -73,7 +73,27 @@ void SqliteManager::GetResultTable(const string &sql, int &row, int &col, char *
 		TRACE_LOG("Get Result Tables successfully \n");
 	}
 }
-///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+AutoGetResultTable::AutoGetResultTable(SqliteManager *db, const string &sql,
+	int &row, int &col, char **&ppRet) :m_db(db)
+{
+	m_db->GetResultTable(sql, row, col, ppRet);
+	m_ppRet = ppRet;
+}
+AutoGetResultTable::~AutoGetResultTable()
+{
+	if (m_ppRet)
+		sqlite3_free_table(m_ppRet);
+}
+
+/////////////////////////////////////////////////////////////////////
+DataManager& DataManager::Getinstance()
+{
+	static DataManager inst;
+	return inst;
+}
+
+
 DataManager::DataManager()
 {
 	m_dbmgr.Open(DOC_DB);
@@ -100,13 +120,14 @@ void DataManager::GetDocs(const string &path, multiset<string> &docs)
 	sprintf(sql,"select name from %s where path='%s'",DOC_TABLE,path.c_str());
 	int row = 0, col = 0;
 	char **ppRet = 0;
-	m_dbmgr.GetResultTable(sql,row,col,ppRet);
+	//m_dbmgr.GetResultTable(sql,row,col,ppRet);
+	AutoGetResultTable at(&m_dbmgr,sql,row,col,ppRet);
 	for (int i = 1; i <= row; ++i)     //无数据时的处理
 	{
 		docs.insert(ppRet[i]);
 	}
 	//释放结果表
-	sqlite3_free_table(ppRet);
+	//sqlite3_free_table(ppRet);
 	
 }
 void DataManager::DeleteDoc(const string &path, const string &doc)
@@ -126,20 +147,21 @@ void DataManager::DeleteDoc(const string &path, const string &doc)
 
 	m_dbmgr.ExcuteSql(sql);
 }
-////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////
 void DataManager::Search(const string &key,vector<pair<string,string>> &doc_path)
 {
 	char sql[SQL_BUFFER_SIZE] = {0};
 	sprintf(sql,"select name,path from %s where name like '%%%s%%'",DOC_TABLE,key.c_str());
 	int row = 0, col = 0;
 	char **ppRet = 0;
-	m_dbmgr.GetResultTable(sql,row,col,ppRet);
-
+	//m_dbmgr.GetResultTable(sql,row,col,ppRet);
+	AutoGetResultTable at(&m_dbmgr,sql,row,col,ppRet);
 	doc_path.clear();
 	for (int i = 1; i <= col; ++i)
 	{
 		doc_path.push_back(make_pair(ppRet[i*col],ppRet[i*col+1]));
 	}
 	//释放结果表
-	sqlite3_free_table(ppRet);
+	//sqlite3_free_table(ppRet);
 }

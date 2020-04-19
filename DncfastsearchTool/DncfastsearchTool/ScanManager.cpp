@@ -3,6 +3,26 @@
 #include "ScanManager.h"
 #include "SySutil.h"
 
+ScanManager::ScanManager()
+{}
+
+void ScanManager::StartScan(const string &path)
+{
+	while (true)
+	{
+		//等待三秒再扫描
+		this_thread::sleep_for(chrono::seconds(3));
+		ScanDirectory(path);
+	}
+}
+
+ScanManager& ScanManager::CreateInstance(const string &path)
+{
+	static ScanManager inst;
+	thread Scan_thread(&StartScan,&inst,path);
+	Scan_thread.detach();
+	return inst;
+}
 void ScanManager::ScanDirectory(const string &path)
 {
 	//扫描本地文件系统
@@ -14,7 +34,7 @@ void ScanManager::ScanDirectory(const string &path)
 	local_set.insert(local_dirs.begin(),local_dirs.end());
 	local_set.insert(local_files.begin(),local_files.end());
 	//扫描数据库文件系统
-
+	DataManager &m_db = DataManager::Getinstance();
 	multiset<string> db_set;
 	m_db.GetDocs(path,db_set);     //?出错
 	//从数据库拿到所有数据

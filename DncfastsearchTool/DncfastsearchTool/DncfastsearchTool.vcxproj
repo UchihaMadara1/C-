@@ -69,6 +69,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="ScanManager.h" />
+    <ClInclude Include="Sysframe.h" />
     <ClInclude Include="SySutil.h" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +77,7 @@
     <ClCompile Include="DocfastSearchTool.cc" />
     <ClCompile Include="ScanManager.cpp" />
     <ClCompile Include="Susutil.cc" />
+    <ClCompile Include="Sysframe.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

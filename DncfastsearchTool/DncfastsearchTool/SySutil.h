@@ -7,7 +7,7 @@ void DirectionList(const string &path,vector<string> &subfile,vector<string> &su
 /////////////////////////////////////////////////////////////////////////////////////
 //日志
 #ifndef __TRACE__
-  #define __TRACE__
+  //#define __TRACE__
 #endif
 
 #ifndef __DEBUG__
@@ -67,3 +67,9 @@ inline static void __ErrorDebug(const char* filename, int line, const char* func
 
 #define ERROR_LOG(...) \
 	__ErrorDebug(__FILE__, __LINE__, __FUNCTION__, __VA_ARGS__);
+
+
+////////////////////////////////////////////
+//中间逻辑层
+std::string ChineseConvertPinYinAllSpell(const std::string& dest_chinese);
+std::string ChineseConvertPinYinInitials(const std::string& name);

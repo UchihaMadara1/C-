@@ -5,6 +5,9 @@
 
 #include "DataManager.h"
 #include "ScanManager.h"
+#include "Sysframe.h"
+
+#include <vld.h>
 //静态库
 
 
@@ -141,7 +144,7 @@ void Test_Scan()
 	//const string &path = "D:\\git上传目录\\DncfastsearchTool\\DncfastsearchTool";
 	const string &path = "C:\\Users\\Administrator\\Desktop\\Test";
 	
-	ScanManager sm;
+	ScanManager &sm = ScanManager::CreateInstance(path);
 	
 	sm.ScanDirectory(path);
 }
@@ -149,11 +152,13 @@ void Test_Search()
 {
 	const string &path = "C:\\Users\\Administrator\\Desktop\\Test";
 	//创建扫描实例
-	ScanManager sm;
 
+	//ScanManager sm;
+	//sm.ScanDirectory(path);
+	ScanManager &sm = ScanManager::CreateInstance(path);
 	sm.ScanDirectory(path);
 	//创建搜索实例
-	DataManager dm;
+	DataManager &dm = DataManager::Getinstance();
 
 	string key;
 	vector<pair<string, string>> doc_path;
@@ -169,18 +174,60 @@ void Test_Search()
 			printf("%-15s%-50s\n", e.first.c_str(), e.second.c_str());
 	}
 }
-int main(int argc, char *argv[])
+void Test_ChineseConvert()
 {
-	//Test_Log();
-	//Test_Sqlite();
-	//Test_SqliteManager();
-	//Test_Set;
-	//Test_Map();
-	//Test_Scan();
-	Test_Search();
+	string str = "比特科技";
+	string pinyin = ChineseConvertPinYinAllSpell(str);
+	cout << "pinyin = " << pinyin << endl;
 
-	return 0;
+	string initials = ChineseConvertPinYinInitials(str);
+	cout << "initials = " << initials << endl;
 }
+void Test_Frame()
+{
+	//system("mode con cols=60 lines=10");
+	//SetCurPos(4,(60 - strlen("hello bit..."))/2);
+	//printf("hello bit...\n");
+	char *title = "文档搜索神器";
+	DrawFrame(title);
+}
+void main()
+{
+	//Test_Search();
+	//Test_ChineseConvert();
+	Test_Frame();
+}
+//void Thread_fun(int n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		cout << "This is Child thread" << endl;
+//	}
+//}
+//void Test_Thread()
+//{
+//	int n = 2;
+//	thread th(Thread_fun,n);
+//	th.detach();
+//	for (int i = 0; i < 10; ++i)
+//	{
+//		cout << "This is Main thread" << endl;
+//	}
+//	//th.join();
+//}
+//int main(int argc, char *argv[])
+//{
+//	//Test_Log();
+//	//Test_Sqlite();
+//	//Test_SqliteManager();
+//	//Test_Set;
+//	//Test_Map();
+//	//Test_Scan();
+//	//Test_Search();
+//	Test_Thread();
+//
+//	return 0;
+//}
 //void Test_DirectionList()
 //{
 //	const string &path = "D:\\我的文档\\Tencent Files\\1374638229\\QQ";

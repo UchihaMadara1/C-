@@ -7,6 +7,11 @@ class ScanManager
 {
 public:
 	void ScanDirectory(const string &path);
+public:
+	static ScanManager& CreateInstance(const string &path);
+	void StartScan(const string &path);
 private:
-	DataManager m_db;
+	ScanManager();
+private:
+	//DataManager m_db;
 };
