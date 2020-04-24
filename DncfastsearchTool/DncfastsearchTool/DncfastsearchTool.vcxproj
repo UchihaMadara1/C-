@@ -76,7 +76,7 @@
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DocfastSearchTool.cc" />
     <ClCompile Include="ScanManager.cpp" />
-    <ClCompile Include="Susutil.cc" />
+    <ClCompile Include="Sysutil.cc" />
     <ClCompile Include="Sysframe.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
